@@ -1,13 +1,15 @@
 ﻿toggle_my_window = {
     effect = {
-        if = {
-            limit = {
-                has_global_variable = show_my_window
+        root = {
+            if = {
+                limit = {
+                    has_variable = show_my_window
+                }
+                remove_variable = show_my_window
             }
-            remove_global_variable = show_my_window
-        }
-        else = {
-            set_global_variable = show_my_window
+            else = {
+                set_variable = show_my_window
+            }
         }
     }
 }

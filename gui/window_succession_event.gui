@@ -986,63 +986,7 @@ window = {
 				}
 			}
 
-			container = {
-				button_standard = {
-					onclick = "[GetScriptedGui('toggle_my_window').Execute( GuiScope.End )]" 
-				}
-
-				widget = {
-					visible = "[GetGlobalVariable('show_my_window').Var.IsSet]" 
-
-					name = "header"
-					size = { 500 56 }
-	
-					text_label_center = {
-						name = "choose_destiny_header"
-						text = choose_destiny_header_text
-						using = Font_Type_Flavor
-						parentanchor = top|hcenter
-						fontsize = 30
-						default_format = "#V"
-					}
-				}
-			}
-			
-			scrollbox = {
-				name = "characters_scroll_area"
-				layoutpolicy_vertical = expanding
-				layoutpolicy_horizontal = expanding
-
-				blockoverride "scrollbox_content" {
-
-					block "container_implementation" {
-						vbox = {
-							layoutpolicy_horizontal = expanding
-
-							datamodel = "[GetGlobalVariable('pad_global_list')]"
-							#datamodel = "[SuccessionEventWindow.GetMainDestinyCharacters]"
-
-							item = {
-								layoutpolicy_vertical = expanding
-								layoutpolicy_horizontal = expanding
-
-								successor_character_list_item = {
-									layoutpolicy_vertical = expanding
-									layoutpolicy_horizontal = expanding
-
-									datacontext = "[Scope.GetCharacter]"
-									block "item_size" {
-										size = { 0 160 } 
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
 			scrollarea = {
-				visible = false
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
 
@@ -1059,14 +1003,11 @@ window = {
 						layoutpolicy_horizontal = expanding
 						hbox = {
 							datamodel = "[SuccessionEventWindow.GetMainDestinyCharacters]"
-
 							layoutpolicy_vertical = expanding
 							spacing = 10
 
 							item = {
-								widget_destiny_character = {
-									datacontext = "[DestinyCharacter.GetCharacter]"
-								}
+								widget_destiny_character = {}
 							}
 						}
 					}
@@ -1581,8 +1522,7 @@ types Legacy
 
 		size = { 290 560 }
 
-#		datacontext = "[DestinyCharacter.GetCharacter]"
-#		datacontext = "[Scope.GetCharacter]"
+		datacontext = "[DestinyCharacter.GetCharacter]"
 
 		visible = "[Character.IsValid]"
 
