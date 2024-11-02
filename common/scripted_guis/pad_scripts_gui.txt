@@ -1,0 +1,17 @@
+﻿pad_update_candidates = {
+	effect = {
+		clear_variable_list = pad_candidates
+
+		every_living_character = {
+			limit = {
+				is_ruler = yes
+			}
+			root = {
+				add_to_variable_list = {
+					name = pad_candidates
+					target = prev
+				}
+			}
+		}
+	}
+}

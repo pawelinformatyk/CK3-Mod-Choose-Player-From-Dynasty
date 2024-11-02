@@ -1007,7 +1007,9 @@ window = {
 					hbox = {
 						layoutpolicy_horizontal = expanding
 						hbox = {
-							datamodel = "[SuccessionEventWindow.GetMainDestinyCharacters]"
+							#datamodel = "[SuccessionEventWindow.GetMainDestinyCharacters]"
+							datamodel = "[GetPlayer.MakeScope.GetList('pad_candidates')]"
+
 							layoutpolicy_vertical = expanding
 							spacing = 10
 
@@ -1030,6 +1032,16 @@ window = {
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
 				allow_outside = yes
+
+				button_standard = {
+					name = "refresh"
+					size = { 220 42 }
+										
+					#onclick = "[GetScriptedGui('pad_clear_candidates').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+					onclick = "[GetScriptedGui('pad_update_candidates').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+
+					text = "refresh"
+				}
 
 				button_standard_back = {
 					name = "cancel_button"
