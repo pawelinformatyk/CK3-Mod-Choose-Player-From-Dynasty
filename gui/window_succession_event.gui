@@ -965,7 +965,7 @@ window = {
 			margin_top = -70
 		
 		}
-		
+
 		### DESTINY
 		vbox = {
 			using = Window_Margins
@@ -1002,33 +1002,12 @@ window = {
 					hbox = {
 						layoutpolicy_horizontal = expanding
 						hbox = {
-							visible = "[Not( GetVariableSystem.Exists( 'pad_window_open' ) )]"
-
-							layoutpolicy_vertical = expanding
-							spacing = 10
-
 							datamodel = "[SuccessionEventWindow.GetMainDestinyCharacters]"
-
-							item = {
-								widget_destiny_character = {
-									datacontext = "[DestinyCharacter.GetCharacter]"
-								}
-							}
-						}
-
-						hbox = {
-							visible = "[GetVariableSystem.Exists( 'pad_window_open' )]"
-
 							layoutpolicy_vertical = expanding
 							spacing = 10
 
-							#datamodel = "[GetGlobalList( 'pad_candidates' )]"
-							datamodel = "[SuccessionEventWindow.GetDestinyCharacters]"
-
 							item = {
-								widget_destiny_character = {
-									datacontext = "[Scope.DestinyCharacter]"
-								}
+								widget_destiny_character = {}
 							}
 						}
 					}
@@ -1046,22 +1025,13 @@ window = {
 
 				button_standard_back = {
 					name = "cancel_button"
-					size = { 120 42 }
+					size = { 220 42 }
 					onclick = "[SuccessionEventWindow.ToggleSelectDestinyOpen]"
 					onclick = "[GetVariableSystem.Clear( 'random_destiny_expanded' )]"
 
 					text = "SUCCESSION_EVENT_WINDOW_CANCEL_SELECT_DESTINY"
 					tooltip = "SUCCESSION_EVENT_WINDOW_CANCEL_SELECT_DESTINY_TT"
 					clicksound = "event:/SFX/UI/Generic/sfx_ui_generic_close"
-				}
-
-				button_standard = {
-					name = "More Destiny"
-					size = { 220 42 }
-										
-					text = "More Destinies"
-
-					onclick = "[GetVariableSystem.Toggle( 'pad_window_open' )]"
 				}
 
 				hbox = {
@@ -1551,6 +1521,8 @@ types Legacy
 	type widget_destiny_character = widget {
 
 		size = { 290 560 }
+
+		datacontext = "[DestinyCharacter.GetCharacter]"
 
 		visible = "[Character.IsValid]"
 
