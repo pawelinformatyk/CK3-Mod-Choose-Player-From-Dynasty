@@ -1,181 +1,26 @@
-pad_init = {
-    effect = {
-         root = {
-            clear_variable_list = pad_list
-
-            set_variable = { 
-                name = pad_list_size 
-                value = 49
-            }
-            set_variable = { 
-                name = pad_list_left_boundary 
-                value = 0
-            }
-            set_variable = { 
-                name = pad_list_right_boundary 
-                value = var:pad_list_size
-            }
-        }
-    }   
-}
-
 #TODO: Get from native on action
 
-pad_deinit = {
-    effect = {
-        root = {
-            clear_variable_list = pad_list
-            remove_variable = pad_list_size
-            remove_variable = pad_list_left_boundary
-            remove_variable = pad_list_right_boundary
-            remove_variable = pad_tab_open_after_transition 
-            remove_variable = pad_tab_opened
-        }
-    }
-}
+pad_update_candidates = { 
+	effect = {
+		clear_global_variable_list = pad_candidates
 
-# Should get dynasty from dead character then I mightb be albe to play after game ends anyway idk. 
-pad_update_successors  = {
-    effect = {
-        root = {
-            clear_variable_list = pad_list
-        }
+		every_living_character = {
+			limit = {
+				is_ruler = yes
+			}
 
-        scope:dynasty = {
-            ordered_dynasty_member = {
-                limit = { 
-                    is_landed = yes 
-                    NOR = {
-                        has_government = republic_government
-                        has_government = theocracy_government
-                    }
-                }
-                
-                order_by = prowess
-                min = root.var:pad_list_left_boundary
-                max = root.var:pad_list_right_boundary
-                check_range_bounds = no 
-                
-                root = {
-                    add_to_variable_list = {
-                        name = pad_list
-                        target = prev
-                    }
-                }
-            }
-        }
-    }
-}
-
-pad_list_next_page = {
-    effect = {
-        root = {
-            if = {
-                limit = {   
-                    variable_list_size = {
-                        name = pad_list
-                        value = var:pad_list_size
-                    }
-                }
-                
-                set_variable = { 
-                    name = pad_list_left_boundary 
-                    value = var:pad_list_right_boundary
-                }
-                
-                change_variable = { 
-                    name = pad_list_right_boundary 
-                    add = var:pad_list_size
-                }
-            }
-        }
-    }
-}
-
-pad_list_prev_page = {
-    effect = {
-        root = {
-            if = {
-                limit = {   
-                    var:pad_list_left_boundary > 0
-                }
-
-                set_variable = { 
-                    name = pad_list_right_boundary
-                    value = var:pad_list_left_boundary
-                }
-                
-                change_variable = { 
-                    name = pad_list_left_boundary 
-                    subtract = var:pad_list_size
-                }
-            }
-        }
-    }
+			add_to_global_variable_list = {
+				name = pad_candidates
+				target = this
+			}
+		}
+	} 
 }
 
 pad_continue_as = {
     effect = {
         root = {
             set_player_character = scope:character
-        }
-    }
-}
-
-pad_continue_as_random_character = {
-    effect = {
-        scope:dynasty = {
-            random_dynasty_member = {
-                limit = {
-                    is_landed = yes
-                    
-                    NOR = {
-                        has_government = republic_government
-                        has_government = theocracy_government
-                    }
-                }
-
-                root = {
-                    set_player_character = PREV
-                }
-            }
-        }
-    }
-}
-
-pad_set_tab_open_after_transition = {
-    effect = {
-        root = {
-            set_variable = {
-                name = pad_tab_open_after_transition
-            }
-        }   
-    }   
-}
-
-pad_on_tab_transition_ended = {
-    effect = {
-        root = {
-            remove_variable = pad_tab_open_after_transition
-        }   
-    }   
-}
-
-pad_on_tab_transition_started = {
-    effect = {
-        root = {
-            if = {
-                limit = {
-                   exists = var:pad_tab_open_after_transition
-                }
-
-                set_variable = {
-                    name = pad_tab_opened
-                }
-            }
-            else = {
-                remove_variable = pad_tab_opened
-            }
         }
     }
 }

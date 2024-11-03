@@ -7,14 +7,13 @@ window = {
 	size = { 1000 760 }
 	layer = windows_layer
 
+	#TODO:
 	state = {
 		name =_show
-		on_start = "[GetScriptedGui('pad_init').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 	}
 	
 	state = {
 		name = _hide
-		on_finish = "[GetScriptedGui('pad_deinit').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 	}
 
 	widget = {
@@ -40,7 +39,6 @@ window = {
 		
 		}
 
-		### DESTINY
 		vbox = {
 			using = Window_Margins
 			margin_bottom = 15
@@ -60,28 +58,32 @@ window = {
 				}
 			}
 
-			scrollarea = {
-				layoutpolicy_horizontal = expanding
+			scrollbox = {
+				name = "characters_scroll_area"
 				layoutpolicy_vertical = expanding
+				layoutpolicy_horizontal = expanding
 
-				min_height = 560
+				blockoverride "scrollbox_content" {
 
-				scrollbarpolicy_vertical = always_off
+					block "container_implementation" {
+						vbox = {
+							layoutpolicy_horizontal = expanding
 
-				scrollbar_horizontal = {
-					using = Scrollbar_Horizontal
-				}
-
-				scrollwidget = {
-					hbox = {
-						layoutpolicy_horizontal = expanding
-						hbox = {
-							datamodel = "[SuccessionEventWindow.GetMainDestinyCharacters]"
-							layoutpolicy_vertical = expanding
-							spacing = 10
+							datamodel = "[GetGlobalList( 'pad_candidates' )]"
 
 							item = {
-								widget_destiny_character = {}
+								layoutpolicy_vertical = expanding
+								layoutpolicy_horizontal = expanding
+
+								successor_character_list_item = {
+									layoutpolicy_vertical = expanding
+									layoutpolicy_horizontal = expanding
+
+									datacontext = "[Scope.GetCharacter]"
+									block "item_size" {
+										size = { 0 160 } 
+									}
+								}
 							}
 						}
 					}
@@ -106,6 +108,16 @@ window = {
 					text = "SUCCESSION_EVENT_WINDOW_CANCEL_SELECT_DESTINY"
 					tooltip = "SUCCESSION_EVENT_WINDOW_CANCEL_SELECT_DESTINY_TT"
 					clicksound = "event:/SFX/UI/Generic/sfx_ui_generic_close"
+				}
+
+
+				button_standard = {
+					name = "refresh"
+					size = { 220 42 }
+										
+					onclick = "[GetScriptedGui('pad_update_candidates').Execute(GuiScope.End)]"
+	
+					text = "[GetDataModelSize(GetGlobalList('pad_candidates'))]"
 				}
 
 				hbox = {
