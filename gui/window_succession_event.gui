@@ -941,7 +941,6 @@ window = {
 	parentanchor = center
 	size = { 1000 760}
 	layer = windows_layer
-	# TODO:
 	datacontext = "[GetVariableSystem]"
 
 	widget = {
@@ -967,10 +966,8 @@ window = {
 		
 		}
 		
-		### PAD
+		### DESTINY
 		vbox = {
-			visible = "[GetVariableSystem.Exists( 'pad_window_open' )]"
-
 			using = Window_Margins
 			margin_bottom = 15
 			layoutpolicy_vertical = expanding
@@ -989,8 +986,6 @@ window = {
 				}
 			}
 
-			expand = {}
-			
 			scrollarea = {
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
@@ -1007,104 +1002,37 @@ window = {
 					hbox = {
 						layoutpolicy_horizontal = expanding
 						hbox = {
-							#datamodel = "[SuccessionEventWindow.GetMainDestinyCharacters]"
-							datamodel = "[GetGlobalList('pad_candidates')]"
+							visible = "[Not( GetVariableSystem.Exists( 'pad_window_open' ) )]"
 
 							layoutpolicy_vertical = expanding
 							spacing = 10
 
+							datamodel = "[SuccessionEventWindow.GetMainDestinyCharacters]"
+
 							item = {
-								text_single = {
-									text = "ABC"
+								widget_destiny_character = {
+									datacontext = "[DestinyCharacter.GetCharacter]"
+								}
+							}
+						}
+
+						hbox = {
+							visible = "[GetVariableSystem.Exists( 'pad_window_open' )]"
+
+							layoutpolicy_vertical = expanding
+							spacing = 10
+
+							#datamodel = "[GetGlobalList( 'pad_candidates' )]"
+							datamodel = "[SuccessionEventWindow.GetDestinyCharacters]"
+
+							item = {
+								widget_destiny_character = {
+									datacontext = "[Scope.DestinyCharacter]"
 								}
 							}
 						}
 					}
 				}
-
-			}
-
-			expand = {}
-
-			hbox = {
-				spacing = 12
-				margin_bottom = 4
-				margin_left = 37
-				layoutpolicy_horizontal = expanding
-				layoutpolicy_vertical = expanding
-				allow_outside = yes
-
-				button_standard = {
-					name = "refresh"
-					size = { 220 42 }
-										
-					onclick = "[GetScriptedGui('pad_update_candidates').Execute(GuiScope.End)]"
-
-					text = "[GetDataModelSize(GetGlobalList('pad_candidates'))]"
-				}
-
-				button_standard_back = {
-					name = "cancel_button"
-					size = { 220 42 }
-					onclick = "[GetVariableSystem.Clear( 'pad_window_open' )]"
-
-					text = "SUCCESSION_EVENT_WINDOW_CANCEL_SELECT_DESTINY"
-					tooltip = "SUCCESSION_EVENT_WINDOW_CANCEL_SELECT_DESTINY_TT"
-					clicksound = "event:/SFX/UI/Generic/sfx_ui_generic_close"
-				}
-
-				expand = {}
-			}
-		}
-
-		### DESTINY
-		vbox = {
-			visible = "[Not( GetVariableSystem.Exists( 'pad_window_open' ) )]"
-
-			using = Window_Margins
-			margin_bottom = 15
-			layoutpolicy_vertical = expanding
-
-			widget = {
-				name = "header"
-				size = { 500 56 }
-
-				text_label_center = {
-					name = "choose_destiny_header"
-					text = choose_destiny_header_text
-					using = Font_Type_Flavor
-					parentanchor = top|hcenter
-					fontsize = 30
-					default_format = "#V"
-				}
-			}
-
-			scrollarea = {
-				layoutpolicy_horizontal = expanding
-				layoutpolicy_vertical = expanding
-
-				min_height = 560
-
-				scrollbarpolicy_vertical = always_off
-
-				scrollbar_horizontal = {
-					using = Scrollbar_Horizontal
-				}
-
-				scrollwidget = {
-					hbox = {
-						layoutpolicy_horizontal = expanding
-						hbox = {
-							datamodel = "[SuccessionEventWindow.GetMainDestinyCharacters]"
-							layoutpolicy_vertical = expanding
-							spacing = 10
-
-							item = {
-								widget_destiny_character = {}
-							}
-						}
-					}
-				}
 			}
 
 			hbox = {
@@ -1118,13 +1046,22 @@ window = {
 
 				button_standard_back = {
 					name = "cancel_button"
-					size = { 220 42 }
+					size = { 120 42 }
 					onclick = "[SuccessionEventWindow.ToggleSelectDestinyOpen]"
 					onclick = "[GetVariableSystem.Clear( 'random_destiny_expanded' )]"
 
 					text = "SUCCESSION_EVENT_WINDOW_CANCEL_SELECT_DESTINY"
 					tooltip = "SUCCESSION_EVENT_WINDOW_CANCEL_SELECT_DESTINY_TT"
 					clicksound = "event:/SFX/UI/Generic/sfx_ui_generic_close"
+				}
+
+				button_standard = {
+					name = "More Destiny"
+					size = { 220 42 }
+										
+					text = "More Destinies"
+
+					onclick = "[GetVariableSystem.Toggle( 'pad_window_open' )]"
 				}
 
 				hbox = {
@@ -1280,18 +1217,6 @@ window = {
 
 					text = "SUCCESSION_EVENT_WINDOW_RANDOM_CLOSE"
 					min_width = 330
-				}
-
-				button_icon = {
-					name = "pad button"
-					size = { 40 42 }
-					texture = "gfx/interface/icons/flat_icons/window_close.dds"
-					text = "PAD"
-					#TODO:
-					tooltip = "PAD"
-
-					clicksound = "event:/SFX/UI/Generic/sfx_ui_generic_close"
-					onclick = "[GetVariableSystem.Toggle( 'pad_window_open' )]"
 				}
 
 				expand = {}
@@ -1626,8 +1551,6 @@ types Legacy
 	type widget_destiny_character = widget {
 
 		size = { 290 560 }
-
-		datacontext = "[DestinyCharacter.GetCharacter]"
 
 		visible = "[Character.IsValid]"
 
