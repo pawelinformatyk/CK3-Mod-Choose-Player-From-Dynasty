@@ -16,6 +16,13 @@ window = {
 	}
 
 	state = {
+		name = pad_ruler_transition_reset
+		delay = 0.25
+		on_finish = "[SuccessionEventWindow.Close]"
+		on_finish = "[GetVariableSystem.Toggle( 'show_pad_window_succession' )]"
+	}
+
+	state = {
 		name = ruler_transition_reset
 		delay = 0.25
 		on_finish = "[SuccessionEventWindow.Close]"
@@ -903,6 +910,16 @@ window = {
 						onclick = "[PdxGuiTriggerAllAnimations('ruler_transition_reset')]"
 						text = "SUCCESSION_EVENT_WINDOW_CLOSE"
 						min_width = 330
+					}
+
+					button_standard_big = {
+						name = "select_pad_destiny_button"
+						onclick = "[PdxGuiTriggerAllAnimations('pad_ruler_transition_reset')]"
+
+						#TODO
+						text = "Choose a New Pad"
+						tooltip = ""
+						default_format = "#high"
 					}
 
 					button_standard_big = {

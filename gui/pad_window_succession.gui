@@ -1,0 +1,249 @@
+window = {
+	name = "pad_window_succession"
+
+	#visible = "[GetVariableSystem.Exists('show_pad_window_succession')]" 
+
+	parentanchor = center
+	size = { 1000 760 }
+	layer = windows_layer
+
+	state = {
+		name =_show
+		on_start = "[GetScriptedGui('pad_init').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+	}
+	
+	state = {
+		name = _hide
+		on_finish = "[GetScriptedGui('pad_deinit').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+	}
+
+	widget = {
+		parentanchor = center
+		size = { 1000 760 }
+
+		using = Window_Background
+		using = Window_Decoration_Spike
+
+		icon = {
+			name = "death_header"
+			size = { 929 58 }
+			position = { 0 18 }
+			parentanchor = top|hcenter
+			texture = "gfx/interface/window_death/death_header.dds"
+		}
+
+		background = {
+			texture = "gfx/interface/illustrations/background_ruler_transition.dds"
+			margin = { -35 -18 }
+			fittype = centercrop
+			margin_top = -70
+		
+		}
+
+		### DESTINY
+		vbox = {
+			using = Window_Margins
+			margin_bottom = 15
+			layoutpolicy_vertical = expanding
+
+			widget = {
+				name = "header"
+				size = { 500 56 }
+
+				text_label_center = {
+					name = "choose_destiny_header"
+					text = choose_destiny_header_text
+					using = Font_Type_Flavor
+					parentanchor = top|hcenter
+					fontsize = 30
+					default_format = "#V"
+				}
+			}
+
+			scrollarea = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+
+				min_height = 560
+
+				scrollbarpolicy_vertical = always_off
+
+				scrollbar_horizontal = {
+					using = Scrollbar_Horizontal
+				}
+
+				scrollwidget = {
+					hbox = {
+						layoutpolicy_horizontal = expanding
+						hbox = {
+							datamodel = "[SuccessionEventWindow.GetMainDestinyCharacters]"
+							layoutpolicy_vertical = expanding
+							spacing = 10
+
+							item = {
+								widget_destiny_character = {}
+							}
+						}
+					}
+				}
+			}
+
+			hbox = {
+				spacing = 12
+				margin_bottom = 4
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+				allow_outside = yes
+
+				expand = {}
+
+				button_standard_back = {
+					name = "cancel_button"
+					size = { 220 42 }
+					onclick = "[SuccessionEventWindow.ToggleSelectDestinyOpen]"
+					onclick = "[GetVariableSystem.Clear( 'random_destiny_expanded' )]"
+
+					text = "SUCCESSION_EVENT_WINDOW_CANCEL_SELECT_DESTINY"
+					tooltip = "SUCCESSION_EVENT_WINDOW_CANCEL_SELECT_DESTINY_TT"
+					clicksound = "event:/SFX/UI/Generic/sfx_ui_generic_close"
+				}
+
+				hbox = {
+					allow_outside = yes
+
+					widget = {
+						allow_outside = yes
+						visible = "[GetVariableSystem.Exists( 'random_destiny_expanded' )]"
+
+						vbox = {
+							parentanchor = top|left
+							widgetanchor = bottom|left
+							position = { 0 -10 }
+							alwaystransparent = no
+							spacing = 3
+							allow_outside = yes
+							min_width = 220
+
+							background = {
+								texture = "gfx/interface/component_tiles/interaction_menu_bg.dds"
+								spriteType = Corneredtiled
+								spriteborder = { 11 11 }
+								spriteborder_top = 49
+								margin = { 8 14 }
+
+								modify_texture = {
+									name = "overlay"
+									texture = "gfx/interface/component_overlay/overlay_window.dds"
+									blend_mode = overlay
+								}
+							}
+
+							state = {
+								name = _show
+								using = Animation_FadeIn_Quick
+
+								position_y = -20
+							}
+
+							state = {
+								name = _hide
+
+								using = Animation_FadeOut_Quick
+								position_y = 60
+							}
+
+							widget = {
+								size = { 260 28 }
+								hbox = {
+
+									text_single = {
+										layoutpolicy_horizontal = expanding
+										text = "SUCCESSION_EVENT_WINDOW_RANDOM_DESTINY_HEADER"
+										align = nobaseline
+										autoresize = no
+									}
+									button_close = {
+										size = { 25 25 }
+										onclick = "[GetVariableSystem.Toggle( 'random_destiny_expanded' )]"
+										tooltip = "CLOSE_TOOLTIP"
+										shortcut = "close_window"
+									}
+								}
+							}
+
+							vbox = {
+								margin = { 10 3 }
+								margin_top = 10
+
+								datamodel = "[SuccessionEventWindow.GetRandomDestinyCharacters]"
+
+								item = {
+									button_standard_hover = {
+										enabled = "[DestinyCharacter.GetCharacter.IsValid]"
+										onclick = "[SuccessionEventWindow.SelectDestinyCharacter( DestinyCharacter.Self )]"
+										onclick = "[GetVariableSystem.Toggle( 'random_destiny_expanded' )]"
+
+										disableframe = 8
+										blockoverride "disabled" {}
+										size = { 265 30 }
+
+										tooltip = "[DestinyCharacter.GetTypeTooltip]"
+										using = tooltip_es
+
+										hbox = {
+											margin = { 5 0 }
+											spacing = 5
+
+											icon = {
+												name = "interaction_icon"
+												size = { 30 30 }
+												texture = "gfx/interface/icons/character_interactions/icon_dynasty.dds"
+											}
+
+											text_single = {
+												alwaystransparent = yes
+												raw_text = "[Select_CString( DestinyCharacter.GetCharacter.IsValid, '#clickable', '#weak' )] [DestinyCharacter.GetTypeName|U]#!"
+												align = nobaseline
+												max_width = 215
+											}
+
+											expand = {}
+										}
+									}
+								}
+							}
+						}
+					}
+
+					button_standard = {
+						name = "random_button"
+						size = { 220 42 }
+						onclick = "[GetVariableSystem.Toggle( 'random_destiny_expanded' )]"
+						enabled = "[SuccessionEventWindow.HasRandomDestinyCharacters]"
+
+						text = "blank_line"
+						tooltip = "SUCCESSION_EVENT_WINDOW_RANDOM_DESTINY_TT"
+
+						text_single = {
+							position = { 46 8 }
+							layoutpolicy_horizontal = expanding
+							text = "SUCCESSION_EVENT_WINDOW_RANDOM_DESTINY"
+							default_format = "#clickable"
+							align = center
+						}
+
+						button_icon = {
+							position = { 10 0 }
+							parentanchor = left|vcenter
+							alwaystransparent = yes
+							size = { 28 28 }
+							texture = "gfx/interface/icons/flat_icons/randomize.dds"
+						}
+					}
+				}
+
+				expand = {}
+			}
+		}
+	}
+}

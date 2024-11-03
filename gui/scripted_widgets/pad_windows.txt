@@ -1,0 +1,1 @@
+gui/pad_window_succession.gui = pad_window_succession
